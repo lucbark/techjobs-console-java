@@ -19,7 +19,8 @@ public class JobData {
     private static final String DATA_FILE = "resources/job_data.csv";
     private static Boolean isDataLoaded = false;
 
-    private static ArrayList<HashMap<String, String>> allJobs;
+    private static ArrayList<HashMap<String, String>> allJobs; //an array list of hashmaps treat it like an array list
+    //  what you get out of allJobs is a hashmap and the variable you have it stored as will be a hashmap
 
     /**
      * Fetch list of all values from loaded data,
@@ -33,9 +34,9 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
-        ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> values = new ArrayList<>(); //an empty arraylist of strings named "values"
 
-        for (HashMap<String, String> row : allJobs) {
+        for (HashMap<String, String> row : allJobs) { //how to iterate through an arrayList of hashmaps
             String aValue = row.get(field);
 
             if (!values.contains(aValue)) {
@@ -43,7 +44,7 @@ public class JobData {
             }
         }
 
-        return values;
+        return values; //duplicates have been eliminated and the arraylist named "values" is no longer empty
     }
 
     public static ArrayList<HashMap<String, String>> findAll() {
@@ -70,17 +71,41 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
-        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>(); //  arraylist named "jobs"
 
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
 
+        return jobs;
+    }
+
+    public static ArrayList<HashMap<String, String>> findByValue(String value) { //new method to search all columns
+        loadData();
+//start of issue probably
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        for (HashMap<String, String> specificJob : allJobs) { //ArrayList Loop
+            for(String jobKey : specificJob.keySet()) { //jobKey represents individual keys
+
+                String theValue = specificJob.get(jobKey);
+                boolean contains;
+                contains = value.toLowerCase().contains(theValue.toLowerCase());
+//hopefully it is not past here
+                if (contains) {
+                    if (!jobs.contains(specificJob)) { //trying to prevent duplicates from being added
+                        jobs.add(specificJob);
+                    }
+                }
+
+            }
+
+        }
         return jobs;
     }
 
@@ -98,8 +123,8 @@ public class JobData {
 
             // Open the CSV file and set up pull out column header info and records
             Reader in = new FileReader(DATA_FILE);
-            CSVParser parser = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in);
-            List<CSVRecord> records = parser.getRecords();
+            CSVParser parser = CSVFormat.RFC4180.withFirstRecordAsHeader().parse(in); //takes data out of csv file
+            List<CSVRecord> records = parser.getRecords(); //gives a list of csv records
             Integer numberOfColumns = records.get(0).size();
             String[] headers = parser.getHeaderMap().keySet().toArray(new String[numberOfColumns]);
 
