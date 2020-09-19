@@ -88,16 +88,16 @@ public class JobData {
 
     public static ArrayList<HashMap<String, String>> findByValue(String value) { //new method to search all columns
         loadData();
-//start of issue probably
-        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
-        for (HashMap<String, String> specificJob : allJobs) { //ArrayList Loop
-            for(String jobKey : specificJob.keySet()) { //jobKey represents individual keys
 
-                String theValue = specificJob.get(jobKey);
-                boolean contains;
-                contains = value.toLowerCase().contains(theValue.toLowerCase());
-//hopefully it is not past here
-                if (contains) {
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        for (HashMap<String, String> specificJob : allJobs) { //ArrayList Loop to access the specificJob Hashmaps inside the ArrayList
+            for(String jobKey : specificJob.keySet()) { //jobKey represents individual keys in the specificJob Hashmap
+
+                String theValue = specificJob.get(jobKey); //variable created to store the
+                boolean exists;
+                exists = theValue.toLowerCase().contains(value.toLowerCase()); //this was backwards!!! :O It has now been fixed.
+
+                if (exists) {
                     if (!jobs.contains(specificJob)) { //trying to prevent duplicates from being added
                         jobs.add(specificJob);
                     }
